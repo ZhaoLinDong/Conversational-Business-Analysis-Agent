@@ -4,7 +4,7 @@
 import os
 
 # API 配置
-API_KEY = "sk-ws-H.YEMRYYH.JXNR.MEUCIErgF511qVkxCajcM-DSldszHozVpPxrZijs199PrVYMAiEA1k4HAp9A65pmsS_sqYHfSTcsZjlO5VtshQIzeiRiOgE"
+API_KEY = "填入阿里云千问系列秘钥或其余兼容秘钥即可"
 BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 MODEL_NAME = "qwen-plus"
 
