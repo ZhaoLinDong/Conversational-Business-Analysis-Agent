@@ -1,0 +1,82 @@
+{
+  "metric_id": "delivery_score_comparison",
+  "name": "延迟与准时订单平均评分对比",
+  "aliases": [
+    "延迟与准时订单平均评分",
+    "延迟订单平均评分",
+    "准时订单平均评分",
+    "配送延迟评分对比",
+    "评价平均分对比"
+  ],
+  "description": "统计有评价的已送达订单中，延迟订单和准时订单的平均评分。延迟定义为 orders.delivered_at > orders.estimated_delivery_at；准时定义为 orders.delivered_at <= orders.estimated_delivery_at。AVG 会自动忽略没有评价记录的 NULL review_score。",
+  "version": "1.0",
+  "examples": [
+    "有评价的已送达订单中，延迟订单与准时订单的平均评分分别是多少？",
+    "延迟订单和准时订单评分对比",
+    "配送延迟会不会影响评分",
+    "延迟订单平均分是多少"
+  ],
+  "base_table": "orders",
+  "joins": [
+    "orders_reviews"
+  ],
+  "parameters": {},
+  "filters": [
+    {
+      "field": "orders.order_status",
+      "op": "=",
+      "value": {
+        "kind": "literal",
+        "value": "delivered"
+      },
+      "description": "只统计已送达订单"
+    }
+  ],
+  "time": {
+    "field": "orders.purchase_at",
+    "required": false,
+    "description": "可选时间范围，按下单时间 purchase_at 过滤"
+  },
+  "select_exprs": [
+    {
+      "alias": "延迟订单平均评分",
+      "expr": {
+        "kind": "aggregate",
+        "agg": "AVG",
+        "table": "order_reviews",
+        "col": "review_score",
+        "filter_ast": {
+          "type": "predicate",
+          "table": "orders",
+          "col": "delivered_at",
+          "op": ">",
+          "value": null,
+          "value_col": "orders.estimated_delivery_at"
+        }
+      }
+    },
+    {
+      "alias": "准时订单平均评分",
+      "expr": {
+        "kind": "aggregate",
+        "agg": "AVG",
+        "table": "order_reviews",
+        "col": "review_score",
+        "filter_ast": {
+          "type": "predicate",
+          "table": "orders",
+          "col": "delivered_at",
+          "op": "<=",
+          "value": null,
+          "value_col": "orders.estimated_delivery_at"
+        }
+      }
+    }
+  ],
+  "group_by": [],
+  "dimensions": [],
+  "having": [],
+  "order_by": [],
+  "count_subquery": false,
+  "default_limit": 100
+}

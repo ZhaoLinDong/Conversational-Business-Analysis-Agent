@@ -1,0 +1,86 @@
+{
+  "metric_id": "repeat_customer_count",
+  "name": "复购自然客户数",
+  "aliases": [
+    "复购客户数",
+    "复购自然客户数",
+    "重复购买客户数",
+    "至少完成2笔订单的客户数",
+    "完成多笔订单的客户数",
+    "自然客户复购数"
+  ],
+  "description": "统计查询时间范围内，完成至少 min_order_count 笔已送达订单的自然客户数量。自然客户按 customers.customer_unique_id 去重，订单数按 DISTINCT orders.order_id 统计。",
+  "version": "1.0",
+  "examples": [
+    "有多少自然客户完成了至少2笔已送达订单？",
+    "复购客户数是多少",
+    "统计至少完成两笔订单的客户数量",
+    "有多少客户重复购买过"
+  ],
+  "base_table": "orders",
+  "joins": [
+    "orders_customers"
+  ],
+  "parameters": {
+    "min_order_count": {
+      "data_type": "integer",
+      "required": false,
+      "default": 2,
+      "allowed_values": null,
+      "description": "判定复购所需的最少已送达订单数"
+    }
+  },
+  "filters": [
+    {
+      "field": "orders.order_status",
+      "op": "=",
+      "value": {
+        "kind": "literal",
+        "value": "delivered"
+      },
+      "description": "只统计已送达订单"
+    }
+  ],
+  "time": {
+    "field": "orders.purchase_at",
+    "required": false,
+    "description": "订单月份按下单时间 purchase_at 判断"
+  },
+  "select_exprs": [
+    {
+      "alias": "自然客户编号",
+      "expr": {
+        "kind": "field",
+        "table": "customers",
+        "col": "customer_unique_id"
+      }
+    },
+    {
+      "alias": "已送达订单数",
+      "expr": {
+        "kind": "aggregate",
+        "agg": "COUNT_DISTINCT",
+        "table": "orders",
+        "col": "order_id"
+      }
+    }
+  ],
+  "group_by": [
+    "customers.customer_unique_id"
+  ],
+  "dimensions": [],
+  "having": [
+    {
+      "select_alias": "已送达订单数",
+      "op": ">=",
+      "value": {
+        "kind": "param",
+        "value": "min_order_count"
+      },
+      "description": "至少完成 min_order_count 笔已送达订单"
+    }
+  ],
+  "order_by": [],
+  "count_subquery": true,
+  "default_limit": 100
+}

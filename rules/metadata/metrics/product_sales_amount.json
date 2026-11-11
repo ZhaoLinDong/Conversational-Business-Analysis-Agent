@@ -1,0 +1,98 @@
+{
+  "metric_id": "product_sales_amount",
+  "name": "商品销售额",
+  "aliases": [
+    "商品销售额",
+    "销售额",
+    "成交额",
+    "营收",
+    "商品成交金额",
+    "销售金额"
+  ],
+  "description": "统计查询时间范围内已送达订单的商品成交金额，按 order_items.price 汇总，不含运费。",
+  "version": "1.0",
+  "examples": [
+    "2024年1月至2025年12月已送达订单的商品销售额是多少？不含运费。",
+    "统计某段时间的销售额",
+    "这个月成交额是多少"
+  ],
+  "base_table": "orders",
+  "joins": [
+    "orders_order_items",
+    "order_items_products",
+    "products_categories"
+  ],
+  "parameters": {},
+  "filters": [
+    {
+      "field": "orders.order_status",
+      "op": "=",
+      "value": {
+        "kind": "literal",
+        "value": "delivered"
+      },
+      "description": "销售额只统计已送达订单"
+    }
+  ],
+  "time": {
+    "field": "orders.purchase_at",
+    "required": false,
+    "description": "订单月份按下单时间 purchase_at 判断"
+  },
+  "select_exprs": [
+    {
+      "alias": "商品销售额",
+      "expr": {
+        "kind": "aggregate",
+        "agg": "SUM",
+        "table": "order_items",
+        "col": "price"
+      }
+    }
+  ],
+  "group_by": [],
+    "dimensions": [
+    {
+      "dimension_id": "product_category",
+      "name": "商品品类",
+      "aliases": [
+        "品类",
+        "商品品类",
+        "产品类别",
+        "category"
+      ],
+      "select_exprs": [
+        {
+          "alias": "品类编号",
+          "expr": {
+            "kind": "field",
+            "table": "categories",
+            "col": "category_id"
+          }
+        },
+        {
+          "alias": "品类名称",
+          "expr": {
+            "kind": "field",
+            "table": "categories",
+            "col": "category_name_zh"
+          }
+        }
+      ],
+      "group_by": [
+        "categories.category_id",
+        "categories.category_name_zh"
+      ],
+      "description": "按商品所属品类分组统计销售额"
+    }
+  ],
+  "having": [],
+    "order_by": [
+    {
+      "select_alias": "商品销售额",
+      "direction": "DESC"
+    }
+  ],
+  "count_subquery": false,
+  "default_limit": 10
+}

@@ -1,0 +1,54 @@
+{
+  "metric_id": "delivered_order_count",
+  "name": "已送达订单数",
+  "aliases": [
+    "已送达订单数",
+    "送达订单数",
+    "已送达订单笔数",
+    "完成订单数",
+    "订单量"
+  ],
+  "description": "统计查询时间范围内状态为已送达的订单笔数，订单量按 DISTINCT orders.order_id 去重。",
+  "version": "1.0",
+  "examples": [
+    "2024年1月至2025年12月共有多少笔已送达订单？",
+    "统计已送达订单数量",
+    "完成订单数有多少"
+  ],
+  "base_table": "orders",
+  "joins": [],
+  "parameters": {},
+  "filters": [
+    {
+      "field": "orders.order_status",
+      "op": "=",
+      "value": {
+        "kind": "literal",
+        "value": "delivered"
+      },
+      "description": "只统计已送达订单"
+    }
+  ],
+  "time": {
+    "field": "orders.purchase_at",
+    "required": false,
+    "description": "订单月份按下单时间 purchase_at 判断"
+  },
+  "select_exprs": [
+    {
+      "alias": "已送达订单数",
+      "expr": {
+        "kind": "aggregate",
+        "agg": "COUNT_DISTINCT",
+        "table": "orders",
+        "col": "order_id"
+      }
+    }
+  ],
+  "group_by": [],
+  "dimensions": [],
+  "having": [],
+  "order_by": [],
+  "count_subquery": false,
+  "default_limit": 100
+}

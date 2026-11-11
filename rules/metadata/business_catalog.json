@@ -1,0 +1,1073 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "source_file": "D:\\03_pythonProject\\yunzhangfang\\docs\\业务数据说明表.xlsx",
+    "generated_at": "2026-11-09T12:24:56.847112+00:00"
+  },
+  "tables": {
+    "orders": {
+      "表名": "orders",
+      "中文名称": "订单主表",
+      "所属模块": "订单交易",
+      "表类型": "业务表",
+      "数据量级": "百级（当前360行/去重180单）",
+      "更新频率": "按需批量导入"
+    },
+    "order_items": {
+      "表名": "order_items",
+      "中文名称": "订单商品明细表",
+      "所属模块": "订单交易",
+      "表类型": "业务表",
+      "数据量级": "百级（当前718行/去重359行）",
+      "更新频率": "按需批量导入"
+    },
+    "order_payments": {
+      "表名": "order_payments",
+      "中文名称": "订单支付流水表",
+      "所属模块": "支付结算",
+      "表类型": "业务表",
+      "数据量级": "百级（当前364行/去重182行）",
+      "更新频率": "按需批量导入"
+    },
+    "order_reviews": {
+      "表名": "order_reviews",
+      "中文名称": "订单评价表",
+      "所属模块": "评价服务",
+      "表类型": "业务表",
+      "数据量级": "百级（当前284行/去重142条）",
+      "更新频率": "按需批量导入"
+    },
+    "customers": {
+      "表名": "customers",
+      "中文名称": "客户快照表",
+      "所属模块": "客户管理",
+      "表类型": "业务表",
+      "数据量级": "百级（当前360行/去重180条；自然人70）",
+      "更新频率": "按需批量导入"
+    },
+    "products": {
+      "表名": "products",
+      "中文名称": "商品详情表",
+      "所属模块": "商品管理",
+      "表类型": "业务表",
+      "数据量级": "百级（当前60行/去重30个商品）",
+      "更新频率": "按需批量导入"
+    },
+    "sellers": {
+      "表名": "sellers",
+      "中文名称": "商家详情表",
+      "所属模块": "商家管理",
+      "表类型": "业务表",
+      "数据量级": "十级（当前16行/去重8个商家）",
+      "更新频率": "按需批量导入"
+    },
+    "categories": {
+      "表名": "categories",
+      "中文名称": "商品品类配置表",
+      "所属模块": "商品管理",
+      "表类型": "配置表",
+      "数据量级": "十级（当前12行/去重6个品类）",
+      "更新频率": "低频更新"
+    },
+    "geolocation": {
+      "表名": "geolocation",
+      "中文名称": "地区配置表",
+      "所属模块": "公共配置",
+      "表类型": "配置表",
+      "数据量级": "十级（当前20行/去重10个邮编）",
+      "更新频率": "低频更新"
+    },
+    "practice_questions": {
+      "表名": "practice_questions",
+      "中文名称": "业务验收题表",
+      "所属模块": "测试验收",
+      "表类型": "配置表",
+      "数据量级": "十级（当前16行/去重8道）",
+      "更新频率": "低频更新"
+    }
+  },
+  "fields": {
+    "orders.order_id": {
+      "字段名": "orders.order_id",
+      "中文名称": "订单编号",
+      "数据类型": "TEXT",
+      "取值范围": "O+5位数字，如O00001",
+      "业务含义": "唯一标识一个订单，关联订单明细、支付和评价",
+      "敏感级别": "低"
+    },
+    "orders.customer_id": {
+      "字段名": "orders.customer_id",
+      "中文名称": "下单客户记录ID",
+      "数据类型": "TEXT",
+      "取值范围": "C+5位数字，如C00001",
+      "业务含义": "订单关联的客户快照记录",
+      "敏感级别": "中"
+    },
+    "orders.order_status": {
+      "字段名": "orders.order_status",
+      "中文名称": "订单状态",
+      "数据类型": "TEXT",
+      "取值范围": "delivered/shipped/cancelled/unavailable",
+      "业务含义": "订单履约状态，销售额默认只统计delivered",
+      "敏感级别": "低"
+    },
+    "orders.purchase_at": {
+      "字段名": "orders.purchase_at",
+      "中文名称": "下单时间",
+      "数据类型": "TEXT",
+      "取值范围": "YYYY-MM-DD HH:mm:ss",
+      "业务含义": "用户提交订单时间，订单量和销售额默认时间口径",
+      "敏感级别": "低"
+    },
+    "orders.approved_at": {
+      "字段名": "orders.approved_at",
+      "中文名称": "审核通过时间",
+      "数据类型": "TEXT",
+      "取值范围": "YYYY-MM-DD HH:mm:ss；可为空",
+      "业务含义": "订单审核通过时间，取消/无效订单为空",
+      "敏感级别": "低"
+    },
+    "orders.shipped_at": {
+      "字段名": "orders.shipped_at",
+      "中文名称": "发货时间",
+      "数据类型": "TEXT",
+      "取值范围": "YYYY-MM-DD HH:mm:ss；可为空",
+      "业务含义": "商家发货时间，未发货/取消/无效为空",
+      "敏感级别": "低"
+    },
+    "orders.delivered_at": {
+      "字段名": "orders.delivered_at",
+      "中文名称": "送达时间",
+      "数据类型": "TEXT",
+      "取值范围": "YYYY-MM-DD HH:mm:ss；可为空",
+      "业务含义": "用户实际签收时间，用于判断是否延迟",
+      "敏感级别": "低"
+    },
+    "orders.estimated_delivery_at": {
+      "字段名": "orders.estimated_delivery_at",
+      "中文名称": "预计送达时间",
+      "数据类型": "TEXT",
+      "取值范围": "YYYY-MM-DD HH:mm:ss",
+      "业务含义": "平台承诺送达时间，延迟判断基准",
+      "敏感级别": "低"
+    },
+    "order_items.order_id": {
+      "字段名": "order_items.order_id",
+      "中文名称": "订单编号",
+      "数据类型": "TEXT",
+      "取值范围": "O+5位数字",
+      "业务含义": "明细所属订单，与order_item_id构成业务主键",
+      "敏感级别": "低"
+    },
+    "order_items.order_item_id": {
+      "字段名": "order_items.order_item_id",
+      "中文名称": "商品明细序号",
+      "数据类型": "INTEGER",
+      "取值范围": ">=1的整数",
+      "业务含义": "同一订单内商品行号，与order_id构成业务主键",
+      "敏感级别": "低"
+    },
+    "order_items.product_id": {
+      "字段名": "order_items.product_id",
+      "中文名称": "商品编号",
+      "数据类型": "TEXT",
+      "取值范围": "P+4位数字",
+      "业务含义": "订单购买商品，关联商品信息",
+      "敏感级别": "低"
+    },
+    "order_items.seller_id": {
+      "字段名": "order_items.seller_id",
+      "中文名称": "商家编号",
+      "数据类型": "TEXT",
+      "取值范围": "S+3位数字",
+      "业务含义": "商品所属商家，关联商家信息",
+      "敏感级别": "低"
+    },
+    "order_items.shipping_limit_at": {
+      "字段名": "order_items.shipping_limit_at",
+      "中文名称": "最晚发货时间",
+      "数据类型": "TEXT",
+      "取值范围": "YYYY-MM-DD HH:mm:ss",
+      "业务含义": "商家承诺最晚发货时间，用于发货时效分析",
+      "敏感级别": "低"
+    },
+    "order_items.price": {
+      "字段名": "order_items.price",
+      "中文名称": "商品成交金额",
+      "数据类型": "REAL",
+      "取值范围": ">=0的金额",
+      "业务含义": "单行商品成交金额，商品销售额按此字段汇总，不含运费",
+      "敏感级别": "中"
+    },
+    "order_items.freight_value": {
+      "字段名": "order_items.freight_value",
+      "中文名称": "运费",
+      "数据类型": "REAL",
+      "取值范围": ">=0的金额",
+      "业务含义": "单行商品运费，默认不计入商品销售额",
+      "敏感级别": "中"
+    },
+    "customers.customer_id": {
+      "字段名": "customers.customer_id",
+      "中文名称": "客户记录ID",
+      "数据类型": "TEXT",
+      "取值范围": "C+5位数字",
+      "业务含义": "订单侧客户快照记录ID，关联orders.customer_id",
+      "敏感级别": "中"
+    },
+    "customers.customer_unique_id": {
+      "字段名": "customers.customer_unique_id",
+      "中文名称": "自然人客户ID",
+      "数据类型": "TEXT",
+      "取值范围": "U+4位数字",
+      "业务含义": "跨订单识别同一自然人的唯一编号，客户数与复购按此字段",
+      "敏感级别": "中"
+    },
+    "customers.customer_zip_code": {
+      "字段名": "customers.customer_zip_code",
+      "中文名称": "客户邮编",
+      "数据类型": "INTEGER",
+      "取值范围": "6位左右正整数",
+      "业务含义": "客户所在地区邮编，关联geolocation.zip_code",
+      "敏感级别": "中"
+    },
+    "customers.customer_city": {
+      "字段名": "customers.customer_city",
+      "中文名称": "客户城市",
+      "数据类型": "TEXT",
+      "取值范围": "中文城市名",
+      "业务含义": "客户所在城市",
+      "敏感级别": "中"
+    },
+    "customers.customer_state": {
+      "字段名": "customers.customer_state",
+      "中文名称": "客户省/州",
+      "数据类型": "TEXT",
+      "取值范围": "中文省/州名",
+      "业务含义": "客户所在省或州",
+      "敏感级别": "中"
+    },
+    "products.product_id": {
+      "字段名": "products.product_id",
+      "中文名称": "商品编号",
+      "数据类型": "TEXT",
+      "取值范围": "P+4位数字",
+      "业务含义": "唯一标识商品",
+      "敏感级别": "低"
+    },
+    "products.category_id": {
+      "字段名": "products.category_id",
+      "中文名称": "品类编号",
+      "数据类型": "TEXT",
+      "取值范围": "beauty/books/electronics/food/home/sports",
+      "业务含义": "商品所属品类，关联categories.category_id",
+      "敏感级别": "低"
+    },
+    "products.product_name": {
+      "字段名": "products.product_name",
+      "中文名称": "商品名称",
+      "数据类型": "TEXT",
+      "取值范围": "文本",
+      "业务含义": "商品展示名称",
+      "敏感级别": "低"
+    },
+    "products.product_name_length": {
+      "字段名": "products.product_name_length",
+      "中文名称": "商品名称长度",
+      "数据类型": "INTEGER",
+      "取值范围": ">=0整数",
+      "业务含义": "商品名称字符数，描述性属性",
+      "敏感级别": "低"
+    },
+    "products.product_description_length": {
+      "字段名": "products.product_description_length",
+      "中文名称": "商品描述长度",
+      "数据类型": "INTEGER",
+      "取值范围": ">=0整数",
+      "业务含义": "商品描述文本长度，描述性属性",
+      "敏感级别": "低"
+    },
+    "products.product_photos_count": {
+      "字段名": "products.product_photos_count",
+      "中文名称": "商品图片数量",
+      "数据类型": "INTEGER",
+      "取值范围": ">=0整数",
+      "业务含义": "商品详情图片数量",
+      "敏感级别": "低"
+    },
+    "products.product_weight_g": {
+      "字段名": "products.product_weight_g",
+      "中文名称": "商品重量（克）",
+      "数据类型": "INTEGER",
+      "取值范围": ">=0整数",
+      "业务含义": "商品重量，单位克",
+      "敏感级别": "低"
+    },
+    "products.product_length_cm": {
+      "字段名": "products.product_length_cm",
+      "中文名称": "商品长度（厘米）",
+      "数据类型": "INTEGER",
+      "取值范围": ">=0整数",
+      "业务含义": "包装长度，单位厘米",
+      "敏感级别": "低"
+    },
+    "products.product_height_cm": {
+      "字段名": "products.product_height_cm",
+      "中文名称": "商品高度（厘米）",
+      "数据类型": "INTEGER",
+      "取值范围": ">=0整数",
+      "业务含义": "包装高度，单位厘米",
+      "敏感级别": "低"
+    },
+    "products.product_width_cm": {
+      "字段名": "products.product_width_cm",
+      "中文名称": "商品宽度（厘米）",
+      "数据类型": "INTEGER",
+      "取值范围": ">=0整数",
+      "业务含义": "包装宽度，单位厘米",
+      "敏感级别": "低"
+    },
+    "products.base_price": {
+      "字段名": "products.base_price",
+      "中文名称": "商品基准价",
+      "数据类型": "INTEGER",
+      "取值范围": ">=0整数",
+      "业务含义": "商品基准售价，不等同实际成交价；成交价看order_items.price",
+      "敏感级别": "中"
+    },
+    "sellers.seller_id": {
+      "字段名": "sellers.seller_id",
+      "中文名称": "商家编号",
+      "数据类型": "TEXT",
+      "取值范围": "S+3位数字",
+      "业务含义": "唯一标识商家",
+      "敏感级别": "低"
+    },
+    "sellers.seller_name": {
+      "字段名": "sellers.seller_name",
+      "中文名称": "商家名称",
+      "数据类型": "TEXT",
+      "取值范围": "文本",
+      "业务含义": "商家展示名称",
+      "敏感级别": "低"
+    },
+    "sellers.seller_zip_code": {
+      "字段名": "sellers.seller_zip_code",
+      "中文名称": "商家邮编",
+      "数据类型": "INTEGER",
+      "取值范围": "6位左右正整数",
+      "业务含义": "商家所在地区邮编，关联geolocation.zip_code",
+      "敏感级别": "低"
+    },
+    "sellers.seller_city": {
+      "字段名": "sellers.seller_city",
+      "中文名称": "商家城市",
+      "数据类型": "TEXT",
+      "取值范围": "中文城市名",
+      "业务含义": "商家所在城市",
+      "敏感级别": "低"
+    },
+    "sellers.seller_state": {
+      "字段名": "sellers.seller_state",
+      "中文名称": "商家省/州",
+      "数据类型": "TEXT",
+      "取值范围": "中文省/州名",
+      "业务含义": "商家所在省或州",
+      "敏感级别": "低"
+    },
+    "categories.category_id": {
+      "字段名": "categories.category_id",
+      "中文名称": "品类编号",
+      "数据类型": "TEXT",
+      "取值范围": "beauty/books/electronics/food/home/sports",
+      "业务含义": "唯一标识商品品类",
+      "敏感级别": "低"
+    },
+    "categories.category_name_en": {
+      "字段名": "categories.category_name_en",
+      "中文名称": "品类英文名",
+      "数据类型": "TEXT",
+      "取值范围": "英文文本",
+      "业务含义": "品类英文展示名",
+      "敏感级别": "低"
+    },
+    "categories.category_name_zh": {
+      "字段名": "categories.category_name_zh",
+      "中文名称": "品类中文名",
+      "数据类型": "TEXT",
+      "取值范围": "中文文本",
+      "业务含义": "品类中文展示名，报表默认展示",
+      "敏感级别": "低"
+    },
+    "geolocation.zip_code": {
+      "字段名": "geolocation.zip_code",
+      "中文名称": "地区邮编",
+      "数据类型": "INTEGER",
+      "取值范围": "6位左右正整数",
+      "业务含义": "地区维度主键，关联客户与商家邮编",
+      "敏感级别": "低"
+    },
+    "geolocation.latitude": {
+      "字段名": "geolocation.latitude",
+      "中文名称": "纬度",
+      "数据类型": "REAL",
+      "取值范围": "-90至90",
+      "业务含义": "地区中心纬度",
+      "敏感级别": "低"
+    },
+    "geolocation.longitude": {
+      "字段名": "geolocation.longitude",
+      "中文名称": "经度",
+      "数据类型": "REAL",
+      "取值范围": "-180至180",
+      "业务含义": "地区中心经度",
+      "敏感级别": "低"
+    },
+    "geolocation.city": {
+      "字段名": "geolocation.city",
+      "中文名称": "城市",
+      "数据类型": "TEXT",
+      "取值范围": "中文城市名",
+      "业务含义": "地区城市名称",
+      "敏感级别": "低"
+    },
+    "geolocation.state": {
+      "字段名": "geolocation.state",
+      "中文名称": "省/州",
+      "数据类型": "TEXT",
+      "取值范围": "中文省/州名",
+      "业务含义": "地区省或州名称",
+      "敏感级别": "低"
+    },
+    "order_payments.order_id": {
+      "字段名": "order_payments.order_id",
+      "中文名称": "订单编号",
+      "数据类型": "TEXT",
+      "取值范围": "O+5位数字",
+      "业务含义": "支付记录所属订单，与payment_sequence构成业务主键",
+      "敏感级别": "低"
+    },
+    "order_payments.payment_sequence": {
+      "字段名": "order_payments.payment_sequence",
+      "中文名称": "支付序号",
+      "数据类型": "INTEGER",
+      "取值范围": ">=1的整数",
+      "业务含义": "同一订单内支付记录序号，与order_id构成业务主键",
+      "敏感级别": "低"
+    },
+    "order_payments.payment_type": {
+      "字段名": "order_payments.payment_type",
+      "中文名称": "支付方式",
+      "数据类型": "TEXT",
+      "取值范围": "credit_card/debit_card/voucher/bank_transfer",
+      "业务含义": "本笔支付的支付渠道",
+      "敏感级别": "低"
+    },
+    "order_payments.payment_installments": {
+      "字段名": "order_payments.payment_installments",
+      "中文名称": "支付分期数",
+      "数据类型": "INTEGER",
+      "取值范围": ">=1的整数，1表示不分期",
+      "业务含义": "本笔支付的分期期数",
+      "敏感级别": "低"
+    },
+    "order_payments.payment_value": {
+      "字段名": "order_payments.payment_value",
+      "中文名称": "支付金额",
+      "数据类型": "REAL",
+      "取值范围": ">=0的金额",
+      "业务含义": "本笔支付实际金额，可能包含运费，不等同商品销售额",
+      "敏感级别": "中"
+    },
+    "order_reviews.review_id": {
+      "字段名": "order_reviews.review_id",
+      "中文名称": "评价编号",
+      "数据类型": "TEXT",
+      "取值范围": "R+5位数字",
+      "业务含义": "唯一标识一条评价",
+      "敏感级别": "低"
+    },
+    "order_reviews.order_id": {
+      "字段名": "order_reviews.order_id",
+      "中文名称": "订单编号",
+      "数据类型": "TEXT",
+      "取值范围": "O+5位数字",
+      "业务含义": "评价所属订单",
+      "敏感级别": "低"
+    },
+    "order_reviews.review_score": {
+      "字段名": "order_reviews.review_score",
+      "中文名称": "评价分数",
+      "数据类型": "INTEGER",
+      "取值范围": "1-5分",
+      "业务含义": "用户订单评分，<=2定义为低分评价",
+      "敏感级别": "低"
+    },
+    "order_reviews.review_title": {
+      "字段名": "order_reviews.review_title",
+      "中文名称": "评价类型",
+      "数据类型": "TEXT",
+      "取值范围": "文本；可为空",
+      "业务含义": "购买反馈类型或体验不佳类型",
+      "敏感级别": "中"
+    },
+    "order_reviews.review_message": {
+      "字段名": "order_reviews.review_message",
+      "中文名称": "评价内容",
+      "数据类型": "TEXT",
+      "取值范围": "文本；可为空，可能含个人信息",
+      "业务含义": "用户评价正文",
+      "敏感级别": "中"
+    },
+    "order_reviews.review_created_at": {
+      "字段名": "order_reviews.review_created_at",
+      "中文名称": "评价时间",
+      "数据类型": "TEXT",
+      "取值范围": "YYYY-MM-DD HH:mm:ss",
+      "业务含义": "评价创建时间，评分趋势默认时间字段",
+      "敏感级别": "低"
+    },
+    "order_reviews.seller_answered_at": {
+      "字段名": "order_reviews.seller_answered_at",
+      "中文名称": "商家回复时间",
+      "数据类型": "TEXT",
+      "取值范围": "YYYY-MM-DD HH:mm:ss；可为空",
+      "业务含义": "商家回复评价的时间，空表示未回复",
+      "敏感级别": "低"
+    }
+  },
+  "enums": {
+    "orders.order_status": [
+      {
+        "枚举值": "delivered",
+        "枚举名称": "已送达",
+        "业务说明": "订单完成签收；计入已送达订单数和商品销售额",
+        "是否有效": "是"
+      },
+      {
+        "枚举值": "shipped",
+        "枚举名称": "已发货",
+        "业务说明": "商家已发货但未送达；不计入已送达指标",
+        "是否有效": "是"
+      },
+      {
+        "枚举值": "cancelled",
+        "枚举名称": "已取消",
+        "业务说明": "订单取消；相关履约时间通常为空",
+        "是否有效": "是"
+      },
+      {
+        "枚举值": "unavailable",
+        "枚举名称": "无效订单",
+        "业务说明": "订单不可用或无效；不计入销售指标",
+        "是否有效": "是"
+      }
+    ],
+    "order_payments.payment_type": [
+      {
+        "枚举值": "credit_card",
+        "枚举名称": "信用卡",
+        "业务说明": "信用卡支付渠道",
+        "是否有效": "是"
+      },
+      {
+        "枚举值": "debit_card",
+        "枚举名称": "借记卡",
+        "业务说明": "借记卡支付渠道",
+        "是否有效": "是"
+      },
+      {
+        "枚举值": "voucher",
+        "枚举名称": "代金券",
+        "业务说明": "使用代金券支付",
+        "是否有效": "是"
+      },
+      {
+        "枚举值": "bank_transfer",
+        "枚举名称": "银行转账",
+        "业务说明": "银行转账支付",
+        "是否有效": "是"
+      }
+    ],
+    "order_reviews.review_score": [
+      {
+        "枚举值": "1",
+        "枚举名称": "1分",
+        "业务说明": "非常不满意",
+        "是否有效": "是"
+      },
+      {
+        "枚举值": "2",
+        "枚举名称": "2分",
+        "业务说明": "不满意",
+        "是否有效": "是"
+      },
+      {
+        "枚举值": "3",
+        "枚举名称": "3分",
+        "业务说明": "一般",
+        "是否有效": "是"
+      },
+      {
+        "枚举值": "4",
+        "枚举名称": "4分",
+        "业务说明": "满意",
+        "是否有效": "是"
+      },
+      {
+        "枚举值": "5",
+        "枚举名称": "5分",
+        "业务说明": "非常满意",
+        "是否有效": "是"
+      }
+    ],
+    "categories.category_id": [
+      {
+        "枚举值": "beauty",
+        "枚举名称": "美妆个护",
+        "业务说明": "Beauty品类",
+        "是否有效": "是"
+      },
+      {
+        "枚举值": "books",
+        "枚举名称": "图书文教",
+        "业务说明": "Books品类",
+        "是否有效": "是"
+      },
+      {
+        "枚举值": "electronics",
+        "枚举名称": "数码家电",
+        "业务说明": "Electronics品类",
+        "是否有效": "是"
+      },
+      {
+        "枚举值": "food",
+        "枚举名称": "食品饮料",
+        "业务说明": "Food品类",
+        "是否有效": "是"
+      },
+      {
+        "枚举值": "home",
+        "枚举名称": "家居生活",
+        "业务说明": "Home & Living品类",
+        "是否有效": "是"
+      },
+      {
+        "枚举值": "sports",
+        "枚举名称": "运动户外",
+        "业务说明": "Sports品类",
+        "是否有效": "是"
+      }
+    ]
+  },
+  "lineage": [
+    {
+      "目标字段": "orders.order_id",
+      "中文名称": "订单编号",
+      "上游来源": "当前：Excel/CSV订单文件；规划：订单业务系统",
+      "加工/计算规则": "直接映射，一单一个编号",
+      "下游流向": "order_items.order_id、order_payments.order_id、order_reviews.order_id、订单主题分析",
+      "血缘类型": "直接映射",
+      "说明": "订单业务主键，必须唯一"
+    },
+    {
+      "目标字段": "orders.customer_id",
+      "中文名称": "下单客户记录ID",
+      "上游来源": "当前：Excel/CSV订单文件",
+      "加工/计算规则": "直接映射",
+      "下游流向": "customers.customer_id、客户维度关联",
+      "血缘类型": "直接映射",
+      "说明": "不是自然人ID，不能用于客户数去重"
+    },
+    {
+      "目标字段": "orders.order_status",
+      "中文名称": "订单状态",
+      "上游来源": "当前：Excel/CSV订单文件",
+      "加工/计算规则": "直接映射",
+      "下游流向": "已送达订单数、商品销售额过滤条件",
+      "血缘类型": "直接映射",
+      "说明": "枚举delivered/shipped/cancelled/unavailable"
+    },
+    {
+      "目标字段": "orders.purchase_at",
+      "中文名称": "下单时间",
+      "上游来源": "当前：Excel/CSV订单文件",
+      "加工/计算规则": "直接映射",
+      "下游流向": "订单量、销售额按月统计、环比与时间筛选",
+      "血缘类型": "直接映射",
+      "说明": "默认业务时间口径"
+    },
+    {
+      "目标字段": "orders.delivered_at",
+      "中文名称": "送达时间",
+      "上游来源": "当前：Excel/CSV订单文件",
+      "加工/计算规则": "直接映射",
+      "下游流向": "延迟订单、延迟率计算",
+      "血缘类型": "直接映射",
+      "说明": "未送达或取消订单为空"
+    },
+    {
+      "目标字段": "orders.estimated_delivery_at",
+      "中文名称": "预计送达时间",
+      "上游来源": "当前：Excel/CSV订单文件",
+      "加工/计算规则": "直接映射",
+      "下游流向": "延迟订单、延迟率计算",
+      "血缘类型": "直接映射",
+      "说明": "延迟判断基准"
+    },
+    {
+      "目标字段": "delay_flag",
+      "中文名称": "延迟标识",
+      "上游来源": "orders.delivered_at、orders.estimated_delivery_at、orders.order_status",
+      "加工/计算规则": "仅delivered订单：delivered_at > estimated_delivery_at时为1，否则为0",
+      "下游流向": "延迟订单数、延迟率、商家延迟率",
+      "血缘类型": "计算派生",
+      "说明": "当前不落物理表，由查询计算"
+    },
+    {
+      "目标字段": "order_items.price",
+      "中文名称": "商品成交金额",
+      "上游来源": "当前：Excel/CSV订单明细文件",
+      "加工/计算规则": "直接映射",
+      "下游流向": "商品销售额、品类销售额、商家销售额",
+      "血缘类型": "直接映射",
+      "说明": "默认口径不含运费"
+    },
+    {
+      "目标字段": "order_items.freight_value",
+      "中文名称": "运费",
+      "上游来源": "当前：Excel/CSV订单明细文件",
+      "加工/计算规则": "直接映射",
+      "下游流向": "运费分析",
+      "血缘类型": "直接映射",
+      "说明": "默认不计入商品销售额"
+    },
+    {
+      "目标字段": "order_items.product_id",
+      "中文名称": "商品编号",
+      "上游来源": "当前：Excel/CSV订单明细文件",
+      "加工/计算规则": "直接映射",
+      "下游流向": "products.product_id、品类销售汇总、商品排名",
+      "血缘类型": "直接映射",
+      "说明": "关联商品详情表"
+    },
+    {
+      "目标字段": "order_items.seller_id",
+      "中文名称": "商家编号",
+      "上游来源": "当前：Excel/CSV订单明细文件",
+      "加工/计算规则": "直接映射",
+      "下游流向": "sellers.seller_id、商家销售与履约分析",
+      "血缘类型": "直接映射",
+      "说明": "一个订单可能包含多个商家"
+    },
+    {
+      "目标字段": "order_payments.payment_value",
+      "中文名称": "支付金额",
+      "上游来源": "当前：Excel/CSV支付流水文件",
+      "加工/计算规则": "直接映射",
+      "下游流向": "支付方式分析、支付总额",
+      "血缘类型": "直接映射",
+      "说明": "可能包含运费，不等同商品销售额"
+    },
+    {
+      "目标字段": "order_reviews.review_score",
+      "中文名称": "评价分数",
+      "上游来源": "当前：Excel/CSV评价文件",
+      "加工/计算规则": "直接映射，取值1至5",
+      "下游流向": "平均评分、低分评价数、履约与评分分析",
+      "血缘类型": "直接映射",
+      "说明": "review_score<=2定义为低分评价"
+    },
+    {
+      "目标字段": "customers.customer_unique_id",
+      "中文名称": "自然人客户ID",
+      "上游来源": "当前：Excel/CSV客户文件",
+      "加工/计算规则": "直接映射",
+      "下游流向": "自然客户数、复购客户数、客户分层",
+      "血缘类型": "直接映射",
+      "说明": "客户数必须按此字段去重"
+    },
+    {
+      "目标字段": "products.category_id",
+      "中文名称": "品类编号",
+      "上游来源": "当前：Excel/CSV商品文件",
+      "加工/计算规则": "直接映射",
+      "下游流向": "categories.category_id、品类销售汇总",
+      "血缘类型": "直接映射",
+      "说明": "关联商品品类配置表"
+    },
+    {
+      "目标字段": "categories.category_name_zh",
+      "中文名称": "品类中文名",
+      "上游来源": "当前：Excel/CSV品类配置",
+      "加工/计算规则": "直接映射",
+      "下游流向": "报表品类展示、Agent结果解释",
+      "血缘类型": "直接映射",
+      "说明": "业务报表默认使用中文名"
+    },
+    {
+      "目标字段": "geolocation.zip_code",
+      "中文名称": "地区邮编",
+      "上游来源": "当前：Excel/CSV地区配置",
+      "加工/计算规则": "直接映射",
+      "下游流向": "customers.customer_zip_code、sellers.seller_zip_code、地区分析",
+      "血缘类型": "直接映射",
+      "说明": "逻辑关联，当前库无外键"
+    },
+    {
+      "目标字段": "product_sales_amount",
+      "中文名称": "商品销售额（派生指标）",
+      "上游来源": "order_items.price、orders.order_status、orders.purchase_at、业务主键去重规则",
+      "加工/计算规则": "过滤delivered订单；按订单和明细业务主键去重后SUM(order_items.price)；不含运费",
+      "下游流向": "经营报表、品类分析、商家分析、Agent回答",
+      "血缘类型": "计算派生",
+      "说明": "当前不是物理字段"
+    },
+    {
+      "目标字段": "natural_customer_count",
+      "中文名称": "自然客户数（派生指标）",
+      "上游来源": "customers.customer_unique_id、orders.order_status、orders.purchase_at",
+      "加工/计算规则": "满足条件的订单去重后COUNT(DISTINCT customer_unique_id)",
+      "下游流向": "客户分析、复购分析、经营报表",
+      "血缘类型": "计算派生",
+      "说明": "不能按customer_id去重"
+    },
+    {
+      "目标字段": "delay_rate",
+      "中文名称": "延迟率（派生指标）",
+      "上游来源": "orders.delivered_at、orders.estimated_delivery_at、orders.order_status、orders.order_id",
+      "加工/计算规则": "延迟已送达订单数除以已送达订单数再乘100百分比",
+      "下游流向": "履约报表、商家延迟分析、经营看板",
+      "血缘类型": "计算派生",
+      "说明": "分子分母都只统计delivered订单"
+    }
+  ],
+  "metrics": {
+    "product_sales_amount": {
+      "指标编码": "product_sales_amount",
+      "指标名称": "商品销售额",
+      "业务别名": [
+        "销售额",
+        "成交额",
+        "营收"
+      ],
+      "业务定义": "已送达订单的商品成交金额，不含运费",
+      "SQL模板": "WITH o AS (SELECT DISTINCT * FROM orders WHERE purchase_at >= ? AND purchase_at <= ?), oi AS (SELECT DISTINCT * FROM order_items), p AS (SELECT DISTINCT * FROM products), c AS (SELECT DISTINCT * FROM categories), s AS (SELECT DISTINCT * FROM sellers) SELECT {dim_prefix}ROUND(SUM(oi.price), 2) AS value FROM oi JOIN o ON oi.order_id = o.order_id LEFT JOIN p ON oi.product_id = p.product_id LEFT JOIN c ON p.category_id = c.category_id LEFT JOIN s ON oi.seller_id = s.seller_id WHERE o.order_status = 'delivered' {group_by} ORDER BY value DESC LIMIT ?",
+      "允许维度": [
+        "month",
+        "category",
+        "seller"
+      ],
+      "时间字段": "orders.purchase_at"
+    },
+    "delivered_order_count": {
+      "指标编码": "delivered_order_count",
+      "指标名称": "已送达订单数",
+      "业务别名": [
+        "已送达订单数",
+        "送达订单数",
+        "完成订单数"
+      ],
+      "业务定义": "状态为已送达的订单数量",
+      "SQL模板": "WITH o AS (SELECT DISTINCT * FROM orders WHERE purchase_at >= ? AND purchase_at <= ?), oi AS (SELECT DISTINCT * FROM order_items), p AS (SELECT DISTINCT * FROM products), c AS (SELECT DISTINCT * FROM categories), s AS (SELECT DISTINCT * FROM sellers) SELECT {dim_prefix}COUNT(DISTINCT o.order_id) AS value FROM o LEFT JOIN oi ON oi.order_id = o.order_id LEFT JOIN p ON oi.product_id = p.product_id LEFT JOIN c ON p.category_id = c.category_id LEFT JOIN s ON oi.seller_id = s.seller_id WHERE o.order_status = 'delivered' {group_by} ORDER BY value DESC LIMIT ?",
+      "允许维度": [
+        "month",
+        "category",
+        "seller"
+      ],
+      "时间字段": "orders.purchase_at"
+    }
+  },
+  "indexes": {
+    "tables_by_name_zh": {
+      "订单主表": "orders",
+      "订单商品明细表": "order_items",
+      "订单支付流水表": "order_payments",
+      "订单评价表": "order_reviews",
+      "客户快照表": "customers",
+      "商品详情表": "products",
+      "商家详情表": "sellers",
+      "商品品类配置表": "categories",
+      "地区配置表": "geolocation",
+      "业务验收题表": "practice_questions"
+    },
+    "fields_by_name_zh": {
+      "订单编号": [
+        "orders.order_id",
+        "order_items.order_id",
+        "order_payments.order_id",
+        "order_reviews.order_id"
+      ],
+      "下单客户记录ID": [
+        "orders.customer_id"
+      ],
+      "订单状态": [
+        "orders.order_status"
+      ],
+      "下单时间": [
+        "orders.purchase_at"
+      ],
+      "审核通过时间": [
+        "orders.approved_at"
+      ],
+      "发货时间": [
+        "orders.shipped_at"
+      ],
+      "送达时间": [
+        "orders.delivered_at"
+      ],
+      "预计送达时间": [
+        "orders.estimated_delivery_at"
+      ],
+      "商品明细序号": [
+        "order_items.order_item_id"
+      ],
+      "商品编号": [
+        "order_items.product_id",
+        "products.product_id"
+      ],
+      "商家编号": [
+        "order_items.seller_id",
+        "sellers.seller_id"
+      ],
+      "最晚发货时间": [
+        "order_items.shipping_limit_at"
+      ],
+      "商品成交金额": [
+        "order_items.price"
+      ],
+      "运费": [
+        "order_items.freight_value"
+      ],
+      "客户记录ID": [
+        "customers.customer_id"
+      ],
+      "自然人客户ID": [
+        "customers.customer_unique_id"
+      ],
+      "客户邮编": [
+        "customers.customer_zip_code"
+      ],
+      "客户城市": [
+        "customers.customer_city"
+      ],
+      "客户省/州": [
+        "customers.customer_state"
+      ],
+      "品类编号": [
+        "products.category_id",
+        "categories.category_id"
+      ],
+      "商品名称": [
+        "products.product_name"
+      ],
+      "商品名称长度": [
+        "products.product_name_length"
+      ],
+      "商品描述长度": [
+        "products.product_description_length"
+      ],
+      "商品图片数量": [
+        "products.product_photos_count"
+      ],
+      "商品重量（克）": [
+        "products.product_weight_g"
+      ],
+      "商品长度（厘米）": [
+        "products.product_length_cm"
+      ],
+      "商品高度（厘米）": [
+        "products.product_height_cm"
+      ],
+      "商品宽度（厘米）": [
+        "products.product_width_cm"
+      ],
+      "商品基准价": [
+        "products.base_price"
+      ],
+      "商家名称": [
+        "sellers.seller_name"
+      ],
+      "商家邮编": [
+        "sellers.seller_zip_code"
+      ],
+      "商家城市": [
+        "sellers.seller_city"
+      ],
+      "商家省/州": [
+        "sellers.seller_state"
+      ],
+      "品类英文名": [
+        "categories.category_name_en"
+      ],
+      "品类中文名": [
+        "categories.category_name_zh"
+      ],
+      "地区邮编": [
+        "geolocation.zip_code"
+      ],
+      "纬度": [
+        "geolocation.latitude"
+      ],
+      "经度": [
+        "geolocation.longitude"
+      ],
+      "城市": [
+        "geolocation.city"
+      ],
+      "省/州": [
+        "geolocation.state"
+      ],
+      "支付序号": [
+        "order_payments.payment_sequence"
+      ],
+      "支付方式": [
+        "order_payments.payment_type"
+      ],
+      "支付分期数": [
+        "order_payments.payment_installments"
+      ],
+      "支付金额": [
+        "order_payments.payment_value"
+      ],
+      "评价编号": [
+        "order_reviews.review_id"
+      ],
+      "评价分数": [
+        "order_reviews.review_score"
+      ],
+      "评价类型": [
+        "order_reviews.review_title"
+      ],
+      "评价内容": [
+        "order_reviews.review_message"
+      ],
+      "评价时间": [
+        "order_reviews.review_created_at"
+      ],
+      "商家回复时间": [
+        "order_reviews.seller_answered_at"
+      ]
+    },
+    "metric_aliases": {
+      "销售额": [
+        "product_sales_amount"
+      ],
+      "成交额": [
+        "product_sales_amount"
+      ],
+      "营收": [
+        "product_sales_amount"
+      ],
+      "已送达订单数": [
+        "delivered_order_count"
+      ],
+      "送达订单数": [
+        "delivered_order_count"
+      ],
+      "完成订单数": [
+        "delivered_order_count"
+      ]
+    }
+  }
+}

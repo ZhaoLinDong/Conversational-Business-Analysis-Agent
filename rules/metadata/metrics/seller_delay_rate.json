@@ -1,0 +1,144 @@
+{
+  "metric_id": "seller_delay_rate",
+  "name": "商家延迟率",
+  "aliases": [
+    "商家延迟率",
+    "延迟率最高商家",
+    "商家延迟订单占比",
+    "履约延迟率",
+    "延迟送达率"
+  ],
+  "description": "统计已送达订单中，各商家的延迟订单数和延迟率。延迟定义：orders.delivered_at > orders.estimated_delivery_at。延迟率 = 延迟订单数 / 送达订单数。",
+  "version": "1.0",
+  "examples": [
+    "5月已送达订单不少于10笔的商家中，延迟率最高的是谁？",
+    "哪个商家延迟率最高",
+    "商家延迟率排名",
+    "统计商家履约延迟率"
+  ],
+  "base_table": "orders",
+  "joins": [
+    "orders_order_items",
+    "order_items_sellers"
+  ],
+  "parameters": {
+    "min_delivered_orders": {
+      "data_type": "integer",
+      "required": false,
+      "default": 10,
+      "allowed_values": null,
+      "description": "参与延迟率排名的商家最少已送达订单数"
+    }
+  },
+  "filters": [
+    {
+      "field": "orders.order_status",
+      "op": "=",
+      "value": {
+        "kind": "literal",
+        "value": "delivered"
+      },
+      "description": "只统计已送达订单"
+    }
+  ],
+  "time": {
+    "field": "orders.purchase_at",
+    "required": false,
+    "description": "订单月份按下单时间 purchase_at 判断"
+  },
+  "select_exprs": [
+    {
+      "alias": "商家编号",
+      "expr": {
+        "kind": "field",
+        "table": "order_items",
+        "col": "seller_id"
+      }
+    },
+    {
+      "alias": "商家名称",
+      "expr": {
+        "kind": "field",
+        "table": "sellers",
+        "col": "seller_name"
+      }
+    },
+    {
+      "alias": "送达订单数",
+      "expr": {
+        "kind": "aggregate",
+        "agg": "COUNT_DISTINCT",
+        "table": "orders",
+        "col": "order_id"
+      }
+    },
+    {
+      "alias": "延迟订单数",
+      "expr": {
+        "kind": "aggregate",
+        "agg": "COUNT_DISTINCT",
+        "table": "orders",
+        "col": "order_id",
+        "filter_ast": {
+          "type": "predicate",
+          "table": "orders",
+          "col": "delivered_at",
+          "op": ">",
+          "value": null,
+          "value_col": "orders.estimated_delivery_at"
+        }
+      }
+    },
+    {
+      "alias": "延迟率",
+      "expr": {
+        "kind": "binary",
+        "op": "/",
+        "left": {
+          "kind": "aggregate",
+          "agg": "COUNT_DISTINCT",
+          "table": "orders",
+          "col": "order_id",
+          "filter_ast": {
+            "type": "predicate",
+            "table": "orders",
+            "col": "delivered_at",
+            "op": ">",
+            "value": null,
+            "value_col": "orders.estimated_delivery_at"
+          }
+        },
+        "right": {
+          "kind": "aggregate",
+          "agg": "COUNT_DISTINCT",
+          "table": "orders",
+          "col": "order_id"
+        }
+      }
+    }
+  ],
+  "group_by": [
+    "order_items.seller_id",
+    "sellers.seller_name"
+  ],
+  "dimensions": [],
+  "having": [
+    {
+      "select_alias": "送达订单数",
+      "op": ">=",
+      "value": {
+        "kind": "param",
+        "value": "min_delivered_orders"
+      },
+      "description": "至少 N 笔已送达订单才参与排名"
+    }
+  ],
+  "order_by": [
+    {
+      "select_alias": "延迟率",
+      "direction": "DESC"
+    }
+  ],
+  "count_subquery": false,
+  "default_limit": 10
+}

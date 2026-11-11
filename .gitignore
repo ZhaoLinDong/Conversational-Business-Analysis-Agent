@@ -1,0 +1,42 @@
+# Python 缓存
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# 虚拟环境
+.venv/
+venv/
+env/
+ENV/
+
+# 模型配置和密钥
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# 本地数据库和检查点
+Database
+docs
+
+# IDE 配置
+.idea/
+.vscode/
+
+# 日志和临时文件
+*.log
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
+
+# Python 打包产物
+build/
+dist/
+*.egg-info/

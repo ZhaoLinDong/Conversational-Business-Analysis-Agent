@@ -1,0 +1,86 @@
+{
+  "root_tables": [
+    {
+      "table": "orders",
+      "description": "订单主表：订单状态、下单/发货/送达时间维度查询的起点表"
+    },
+    {
+      "table": "order_items",
+      "description": "订单商品明细表：商品销售额(price)、运费、商品维度查询的起点表"
+    },
+    {
+      "table": "customers",
+      "description": "客户快照表：客户城市/省州分布维度查询的起点表"
+    }
+  ],
+  "join_graph": [
+    {
+      "join_id": "orders_order_items",
+      "left_table": "orders",
+      "right_table": "order_items",
+      "join_type": "LEFT JOIN",
+      "on_expr": "\"orders\".\"order_id\" = \"order_items\".\"order_id\"",
+      "description": "订单 → 商品明细（一行订单含多个商品行，统计销售额必经）"
+    },
+    {
+      "join_id": "orders_customers",
+      "left_table": "orders",
+      "right_table": "customers",
+      "join_type": "LEFT JOIN",
+      "on_expr": "\"orders\".\"customer_id\" = \"customers\".\"customer_id\"",
+      "description": "订单 → 客户快照（带出客户城市/省州）"
+    },
+    {
+      "join_id": "order_items_products",
+      "left_table": "order_items",
+      "right_table": "products",
+      "join_type": "LEFT JOIN",
+      "on_expr": "\"order_items\".\"product_id\" = \"products\".\"product_id\"",
+      "description": "商品明细 → 商品详情（带出商品名称/品类）"
+    },
+    {
+      "join_id": "order_items_sellers",
+      "left_table": "order_items",
+      "right_table": "sellers",
+      "join_type": "LEFT JOIN",
+      "on_expr": "\"order_items\".\"seller_id\" = \"sellers\".\"seller_id\"",
+      "description": "商品明细 → 商家详情（带出商家信息）"
+    },
+    {
+      "join_id": "products_categories",
+      "left_table": "products",
+      "right_table": "categories",
+      "join_type": "LEFT JOIN",
+      "on_expr": "\"products\".\"category_id\" = \"categories\".\"category_id\"",
+      "description": "商品 → 品类配置"
+    },
+    {
+      "join_id": "customers_geolocation",
+      "left_table": "customers",
+      "right_table": "geolocation",
+      "join_type": "LEFT JOIN",
+      "on_expr": "\"customers\".\"customer_zip_code\" = \"geolocation\".\"zip_code\"",
+      "description": "客户 → 地区配置（邮编关联）"
+    },
+    {
+      "join_id": "orders_payments",
+      "left_table": "orders",
+      "right_table": "order_payments",
+      "join_type": "LEFT JOIN",
+      "on_expr": "\"orders\".\"order_id\" = \"order_payments\".\"order_id\"",
+      "description": "订单 → 支付流水（带出支付方式/支付金额）"
+    },
+    {
+      "join_id": "orders_reviews",
+      "left_table": "orders",
+      "right_table": "order_reviews",
+      "join_type": "LEFT JOIN",
+      "on_expr": "\"orders\".\"order_id\" = \"order_reviews\".\"order_id\"",
+      "description": "订单 → 评价（带出评分/评价内容）"
+    }
+  ],
+  "enum_dict": {
+    "orders.order_status": ["delivered", "shipped", "cancelled", "unavailable"],
+    "products.category_id": ["beauty", "books", "electronics", "food", "home", "sports"]
+  }
+}
