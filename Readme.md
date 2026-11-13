@@ -38,16 +38,15 @@ yunzhangfang/
 ├── Model_core/
 │   ├── Agent_with_tools.py      # Agent、工具和中间件装配
 │   └── stream_events.py         # Agent 流式事件处理
-├── Memory/                      # 消息裁剪与会话检查点
-├── tools/                       # 数据导入、业务查询和 SQL 工具
-├── rules/
+├── Memory/                      # 记忆、消息裁剪与会话检查点
+├── tools/                       # Langchain框架的工具，包括数据导入、业务查询和 SQL 工具
+├── rules/                       # 护栏模块   
 │   ├── metadata/                # 业务目录、查询元数据和指标定义
 │   ├── query_plan.py            # 查询计划及校验
 │   ├── metric_compiler.py       # 指标查询编译
 │   └── business_guard.py        # 人工审核与异常处理
 ├── docs/                        # 业务数据字典和说明
 ├── Database/                    # 默认业务数据库目录
-└── main.py                      # 查询计划格式调试
 ```
 
 ## 四、运行环境

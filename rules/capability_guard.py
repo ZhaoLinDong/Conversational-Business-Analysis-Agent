@@ -36,6 +36,7 @@ class QuestionScopeDecision(BaseModel):
         "causal_analysis",
         "prediction",
         "privacy",
+        "data_import",
         "other",
     ] = Field(
         description=(
@@ -45,6 +46,7 @@ class QuestionScopeDecision(BaseModel):
             "causal_analysis=询问因果结论；"
             "prediction=要求预测未来；"
             "privacy=请求敏感个人信息；"
+            "data_import=导入本地文件或文件夹到数据库；"
             "other=其他。"
         )
     )
@@ -112,7 +114,20 @@ _scope_llm = ChatOpenAI(
 
 def build_capability_summary() -> str:
     """构建供能力路由器使用的紧凑 Schema 摘要。"""
-    lines: list[str] = ["【可用业务字段】"]
+    lines: list[str] = [
+        "【可用工具能力】",
+        "- import_data_to_db：导入单个本地数据文件到 SQLite",
+        "- batch_import_from_folder：批量导入文件夹中的数据文件到 SQLite",
+        "- search_business_metrics：搜索标准业务指标",
+        "- query_business_metric：执行标准业务指标查询",
+        "- search_business_schema：检索业务表、字段和 JOIN",
+        "- run_readonly_sql：执行经过校验的只读 SELECT",
+        "- calculate：执行数学计算",
+        "- get_current_time：查询当前时间",
+        "- search_knowledge_base：查询通用知识",
+        "",
+        "【可用业务字段】",
+    ]
 
     try:
         field_meta = load_field_meta()
@@ -182,7 +197,13 @@ def assess_question_scope(
 - causal_analysis：询问因果关系或要求判断谁导致谁；
 - prediction：询问未来预测或未来走势；
 - privacy：请求敏感个人信息；
+- data_import：提供本地文件或文件夹路径，并要求导入数据库；
 - other：其他。
+
+特别注意：
+- 数据导入是系统支持的正常能力，不是查询能力缺失；
+- 用户提到“导入”“导入数据库”“导入表”“批量导入文件夹”时，应判断为 data_import；
+- data_import 的 response_mode 应为 answer，needs_data_query=false。
 
 判断规则：
 - 原理解释类问题不需要具体数据结果时，needs_data_query=false；
@@ -266,10 +287,18 @@ def apply_scope_constraints(
 
     constraints: list[str] = []
 
-    # 不需要数据查询的问题，禁止调用数据查询和 SQL 工具。
-    if (
-        decision.intent == "explanation"
-        or not decision.needs_data_query
+    # 数据导入是写入操作，不走数据查询限制。
+    if decision.intent == "data_import":
+        constraints.append(
+            "本轮是数据导入任务："
+            "应调用 import_data_to_db 或 batch_import_from_folder；"
+            "不要走指标查询或只读 SQL 分析。"
+        )
+
+    # 不需要数据查询的解释类问题，禁止调用数据查询和 SQL 工具。
+    elif (
+            decision.intent == "explanation"
+            or not decision.needs_data_query
     ):
         constraints.append(
             "本轮不需要具体数据结果："

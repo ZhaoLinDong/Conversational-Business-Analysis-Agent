@@ -4,7 +4,7 @@
 import os
 
 # API 配置
-API_KEY = "填入阿里云千问系列秘钥或其余兼容秘钥即可"
+API_KEY = "sk-ws-H.YEMRYYH.JXNR.MEUCIErgF511qVkxCajcM-DSldszHozVpPxrZijs199PrVYMAiEA1k4HAp9A65pmsS_sqYHfSTcsZjlO5VtshQIzeiRiOgE"
 BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 MODEL_NAME = "qwen-plus"
 
@@ -118,4 +118,4 @@ SYSTEM_PROMPT = """你是电商公司的数据分析助手，负责数据导入�
 # ============ SQLite 数据库配置 ============
 # 单库多表：所有数据文件导入同一个数据库（ecommerce.db），文件名作为表名
 SQLITE_DB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Database")
-SQLITE_DB_PATH = os.path.join(SQLITE_DB_DIR, "ecommerce.db")
+SQLITE_DB_PATH = os.path.join(SQLITE_DB_DIR, "Present.db")
